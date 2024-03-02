@@ -32,7 +32,7 @@ public partial class WardenTimer : BasePlugin
 		if (caller is null) return;
 		if (!caller.PlayerName.Contains("Warden"))
 		{
-			args.ReplyToCommand($"come back when your the warden pleb.");
+			args.ReplyToCommand($"You are not the Warden");
 			return;
 		}
 		if (!int.TryParse(args.ArgByIndex(1), out timeywhymy))
