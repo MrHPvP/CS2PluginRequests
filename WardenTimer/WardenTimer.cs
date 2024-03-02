@@ -15,6 +15,8 @@ public partial class WardenTimer : BasePlugin
 	public override string ModuleVersion => "1.0.0";
 	Timer timewillcatchuptousoneday;
 	bool timeractive = false;
+	int timeywhymy = 0;
+	
 
 	[GameEventHandler]
 	public HookResult whenroundhasreacheditslimitforplayingwiththesepeople(EventRoundEnd @event, GameEventInfo info)
@@ -23,16 +25,35 @@ public partial class WardenTimer : BasePlugin
 		timeractive = false;
 		return HookResult.Continue;
 	}
+		[ConsoleCommand("css_stoptime", "creates a timer so the warden knows how long he can ramble on for")]
+	[CommandHelper(1, "Time", CommandUsage.CLIENT_AND_SERVER)]
+	public void stopscurrenttimer(CCSPlayerController? caller, CommandInfo args)
+	{
+		if (caller is null) return;
+		if (!caller.PlayerName.Contains("Warden"))
+		{
+			args.ReplyToCommand($"You are not the Warden");
+			return;
+		}
+	    timeywhymy = 0;
+		timewillcatchuptousoneday.Kill();
+		timeractive = false;
+		var allplayers = Utilities.GetPlayers();
+		foreach (var player in allplayers)
+		{
+			player.PrintToCenter("The Warden has ended the timer!");
+		}
+	}
 
 	[ConsoleCommand("css_time", "creates a timer so the warden knows how long he can ramble on for")]
 	[CommandHelper(1, "Time", CommandUsage.CLIENT_AND_SERVER)]
 	public void getthisterriblewardenoutoffheretimer(CCSPlayerController? caller, CommandInfo args)
 	{
-		var timeywhymy = 0;
+		timeywhymy = 0;
 		if (caller is null) return;
 		if (!caller.PlayerName.Contains("Warden"))
 		{
-			args.ReplyToCommand($"You are not the Warden");
+			args.ReplyToCommand($"come back when your the warden pleb.");
 			return;
 		}
 		if (!int.TryParse(args.ArgByIndex(1), out timeywhymy))
